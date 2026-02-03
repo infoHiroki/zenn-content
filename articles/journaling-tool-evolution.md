@@ -3,7 +3,7 @@ title: "ジャーナリングツールの変遷 - NotionからGitHub + Claude Co
 emoji: "📓"
 type: "idea"
 topics: ["ジャーナリング", "ClaudeCode", "AI", "生産性"]
-published: false
+published: true
 ---
 
 # ジャーナリングツールの変遷 - NotionからGitHub + Claude Codeへ
