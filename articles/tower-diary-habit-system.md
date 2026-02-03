@@ -1,12 +1,12 @@
 ---
-title: "tower - Claude Codeと作る日記・習慣管理システム"
+title: "お前はもう日報を書いている"
 emoji: "🗼"
 type: "tech"
 topics: ["ClaudeCode", "習慣", "Markdown", "Git", "Babashka"]
 published: false
 ---
 
-# tower - 「おはよう」だけで日記が始まる
+# お前はもう日報を書いている
 
 前回の記事で、俺は日記アプリを全部捨てた話をした。
 
