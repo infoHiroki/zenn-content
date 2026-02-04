@@ -28,6 +28,10 @@ tmux。あいつとの付き合いはもう長い。
 
 以上。もう使いたくなっただろ。
 
+こういうやつだ。👇
+
+![Zellijのデモ](https://raw.githubusercontent.com/zellij-org/zellij/main/assets/demo.gif)
+
 ## ⚔️ tmux vs Zellij、体験で語る
 
 比較表とか星の数とか、そういうのはいい。体験で語る。
@@ -139,6 +143,8 @@ Ctrl+P → W → フローティングペインの表示/非表示をトグル
 ```
 
 メインの作業中に「ちょっと`git status`だけ見たい」みたいなとき、最高に便利だ。普通のペインの上に浮かぶ。用が済んだら同じコマンドで消せる。神。🙏
+
+![フローティングペイン](https://zellij.dev/img/floating-panes-preview.png)
 
 ### 5. ロックモード 🔒
 
