@@ -76,6 +76,49 @@
 
 ---
 
+## infohiroki.com → Zenn 移植手順
+
+既存記事をZennに移植するときの手順。
+
+### 1. 元記事を読む
+```
+src/lib/content/blog/{slug}.md
+```
+
+### 2. Zenn版を書く
+```
+~/Dev/zenn-content/articles/{slug}.md
+```
+- frontmatter: `title` / `emoji` / `type: "tech"` / `topics` / `published: true`
+- 文体: 上記の文体ルールに従う
+- タイトル: 元記事と変える（バズ狙い・キャッチー）
+- 構成: 網羅型ガイド → 体験ベース読み物に再構成
+- 絵文字: ふんだんに
+- 画像/GIF: 公式リポジトリから積極的に引用
+- CTA: 入れない
+- 30%以上差別化する
+
+### 3. 記事一覧を更新（両方）
+- `~/Dev/zenn-content/CONTENT_POLICY.md` の記事一覧テーブル
+- `~/Dev/infohiroki-svelte/CONTENT_POLICY.md` の記事一覧テーブル
+
+### 4. コミット & プッシュ（両方のリポジトリ）
+```bash
+# zenn-content
+cd ~/Dev/zenn-content
+git add articles/{slug}.md CONTENT_POLICY.md
+git commit -m "📝 {記事名}を公開"
+git push
+
+# infohiroki-svelte
+cd ~/Dev/infohiroki-svelte
+git add CONTENT_POLICY.md
+git commit -m "📝 CONTENT_POLICY: {記事名}のZenn対応を記録"
+git push
+```
+
+---
+
 ## 参考
 
 - 自社サイト側の方針: infohiroki-svelte/CONTENT_POLICY.md
