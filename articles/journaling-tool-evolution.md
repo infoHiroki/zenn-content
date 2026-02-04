@@ -82,6 +82,8 @@ Notionで日記を書いていた。データベース機能が強力だって�
 
 ## 3️⃣ Logseq時代 - 寄り道
 
+![Logseqの画面](https://user-images.githubusercontent.com/25513724/221387376-4dc419c2-0d0a-460c-a920-2d211e78b456.gif)
+
 ### なぜ乗り換えた
 
 ObsidianからLogseqに移った理由は正直よく覚えてない。
