@@ -14,8 +14,9 @@
 - 短い文を多用
 - 自虐ネタOK
 - 読者に語りかける口調（「〜だろ？」「〜してくれ」）
-- 絵文字は見出しや強調部分に適度に使用
+- 絵文字はふんだんに使用（見出し・本文・テーブル内・文末すべてに）
 - 専門用語は使うが、難しく書かない
+- 画像・GIFは公式リポジトリから引用OK（実演が伝わるものを積極的に使う）
 
 ### 例
 ```markdown
@@ -58,6 +59,7 @@
 | ジャーナリングツールの変遷 | journaling-tool-evolution | ✅ 公開 |
 | tower | tower-diary-habit-system | 🚧 下書き |
 | Zellij完全ガイド | zellij-complete-guide | ✅ 公開 |
+| LazyGitチートシート | lazygit-cheatsheet | ✅ 公開 |
 
 ---
 
