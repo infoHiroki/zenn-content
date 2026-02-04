@@ -57,6 +57,7 @@
 |------|------|---------|
 | ジャーナリングツールの変遷 | journaling-tool-evolution | ✅ 公開 |
 | tower | tower-diary-habit-system | 🚧 下書き |
+| Zellij完全ガイド | zellij-complete-guide | ✅ 公開 |
 
 ---
 
