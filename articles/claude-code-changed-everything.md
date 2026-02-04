@@ -1,5 +1,5 @@
 ---
-title: "Claude Codeを使い始めたら全部変わった"
+title: "ChatGPTコピペ地獄を抜けたら、そこはClaude Codeだった"
 emoji: "🤖"
 type: "tech"
 topics: ["ClaudeCode", "AI", "プログラミング", "Anthropic", "開発ツール"]
