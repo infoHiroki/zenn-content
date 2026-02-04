@@ -60,6 +60,7 @@
 | tower | tower-diary-habit-system | 🚧 下書き |
 | Zellij完全ガイド | zellij-complete-guide | ✅ 公開 |
 | LazyGitチートシート | lazygit-cheatsheet | ✅ 公開 |
+| Claude Code入門 | claude-code-introduction | ✅ 公開 |
 
 ---
 
