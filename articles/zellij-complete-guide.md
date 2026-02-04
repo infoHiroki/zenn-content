@@ -3,7 +3,7 @@ title: "tmux使いが全員Zellijに乗り換える日が来た"
 emoji: "🔥"
 type: "tech"
 topics: ["Zellij", "ターミナル", "tmux", "Rust", "開発環境"]
-published: false
+published: true
 ---
 
 ## 😩 tmuxの苦行、覚えてるか
