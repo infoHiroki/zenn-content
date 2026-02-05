@@ -18,7 +18,7 @@ PRが飛んでくる。差分を開く。500行。目を細める。変数名を
 
 ## 🎤 Anthropicの男
 
-2025年のことだ。AnthropicのErik Schluntzが講演で言い放った。
+2025年のことだ。AnthropicのErik Schluntzが[講演](https://www.youtube.com/watch?v=fHWFF_pnqDk)で言い放った。
 
 もともとの言葉はAndrej Karpathyのものだ。OpenAIの創設メンバーで、テスラのAI部門長だった男。彼がVibe Codingを定義した。
 
