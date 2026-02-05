@@ -59,8 +59,9 @@
 | ジャーナリング | ジャーナリングツールの変遷 | journaling-tool-evolution | ✅ 公開 |
 | Tower | tower | tower-diary-habit-system | 🚧 下書き |
 | Zellij | Zellij完全ガイド | zellij-complete-guide | ✅ 公開 |
-| LazyGit | LazyGitチートシート | lazygit-cheatsheet | ✅ 公開 |
+| LazyGit | LazyGitを知った日、俺はファミコン少年に戻った | lazygit-cheatsheet | ✅ 公開 |
 | Claude Code | ChatGPTコピペ地獄を抜けたら、そこはClaude Codeだった | claude-code-changed-everything | ✅ 公開 |
+| Vibe Coding | Anthropicの男がコードを読むなと言った日 | vibe-coding-production | ✅ 公開 |
 
 ---
 

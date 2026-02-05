@@ -1,5 +1,5 @@
 ---
-title: "git addとgit commitを手打ちしてる全人類に告ぐ"
+title: "LazyGitを知った日、俺はファミコン少年に戻った"
 emoji: "⚡"
 type: "tech"
 topics: ["Git", "LazyGit", "ターミナル", "開発環境", "効率化"]
