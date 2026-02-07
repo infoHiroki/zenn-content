@@ -1,50 +1,70 @@
 ---
-title: "Claude Codeマルチエージェント「kinoko」をOSS化した——セットアップからカスタマイズまで"
+title: "Claude Code 5体を菌糸ネットワークで繋いだらOSSになった"
 emoji: "🍄"
 type: "tech"
 topics: ["ClaudeCode", "マルチエージェント", "tmux", "OSS"]
 published: false
 ---
 
-## 🍄 kinoko、OSSになりました
+## 🍄 菌類、公開します
 
-[前回の記事](https://zenn.dev/hirokitakamura/articles/claude-code-multi-agent-shogun-kinoko)で「菌類5体に転生した」話を書いた。あれから個人的に使い続けて、ハードコードを潰して、誰でも使える形にした。
+[前回](https://zenn.dev/hirokitakamura/articles/claude-code-multi-agent-shogun-kinoko)、将軍システム10体で$100溶かして菌類5体に転生した話を書いた。
+
+あれからしばらく個人で使い続けた。ハードコードを潰して、設定を変数に出して、誰でも動かせる形にした。
+
+**kinoko、OSSにしました 🍄**
 
 GitHub: [infoHiroki/kinoko](https://github.com/infoHiroki/kinoko)
 
-**kinoko** は Claude Code CLI の複数インスタンスを tmux 上で並列稼働させるマルチエージェントシステム。指揮官（霊芝）がタスクを分解して、4体のワーカーが並列で実行する。
+Claude Code CLI を5インスタンス、tmux の上で並列に走らせる。指揮官の霊芝がタスクを分解して、4体のワーカーが同時にぶん回す。通信は Markdown ファイルと `send-keys`。それだけ。サーバーもDBもいらない。
 
 ```
       ユーザー
         │
         ▼ (自然言語で指示)
   ┌───────────┐
-  │   霊芝    │  指揮官 (Opus)
+  │   霊芝    │  指揮官 (Opus) 🧙‍♂️
   │  reishi   │  タスク分解・進捗管理
   └─────┬─────┘
         │ タスク配分
         ▼
 ┌──────────┬──────────┐
-│   beni   │   cord   │  Opus × 2
+│   beni   │   cord   │  Opus × 2 🔥
 ├──────────┼──────────┤
-│   mata   │  enoki   │  Sonnet × 2
+│   mata   │  enoki   │  Sonnet × 2 ⚡
 └──────────┴──────────┘
 ```
 
-前の記事は「なぜ作ったか」の話。今回は「どう使うか」の話をする。
+前の記事は「なぜ作ったか」。今回は「どう使うか」の話。
 
-## 前提条件
+---
 
-必要なもの:
+## 💸 まず金の話をする
 
-- **tmux 3.4以上** — `pane-colours` 機能を使うため。`tmux -V` で確認
+**Claude Max プラン必須。** $100/月 か $200/月。ここは避けられない。
+
+Claude Code 自体が Max プラン前提で、それを5インスタンス並列に立てる。$100プランだとレートリミットとの戦いになる。Opus 5体なんかやったら一瞬で死ぬ。前回の記事で書いた通りだ 💀
+
+| プラン | 体感 | 一言 |
+|--------|------|------|
+| **$100/月** | ギリギリ | Sonnet 多めにしろ。Opus は霊芝だけにしとけ |
+| **$200/月** | 快適 | デフォルト構成で問題なし |
+
+「高い」と思っただろ？ 俺もそう思う。でも5体が並列でコード書いてる画面を見ると、元は取れてる気がしてくる。気がするだけかもしれん 🙃
+
+---
+
+## 📋 用意するもの
+
+- **tmux 3.4以上** — `tmux -V` で確認。古かったら `brew install tmux` で入れ直せ
 - **Claude Code CLI** — `npm install -g @anthropic-ai/claude-code`
-- **Anthropic APIキー** — 環境変数 `ANTHROPIC_API_KEY` に設定
-- **macOS or Linux** — Windows は未対応
+- **macOS か Linux** — Windows は無理。WSLならいけるかもしれんが試してない
 
-tmux のバージョンが古い人は `brew install tmux`（macOS）で最新版が入る。
+tmux のバージョンが 3.4 未満だと `pane-colours` が使えなくて黒文字が見えない。地味に致命的なので確認してくれ。
 
-## セットアップ（3分）
+---
+
+## 🚀 3分で起動する
 
 ```bash
 git clone https://github.com/infoHiroki/kinoko.git
@@ -52,17 +72,9 @@ cd kinoko
 ./deploy.sh
 ```
 
-これだけ。
+これだけ。npm install もビルドも設定ファイルもない。
 
-`deploy.sh` が以下を自動でやる:
-
-1. tmux セッション `kinoko` を作成
-2. 5ペインに分割（ワーカー4 + 指揮官1）
-3. 各ペインに `@agent_id` を設定（ペイン特定用）
-4. Claude Code を5インスタンス起動
-5. 全エージェントに指示書（`instructions/*.md`）を読み込ませる
-
-起動すると菌糸ネットワーク図が表示される:
+`deploy.sh` が勝手に tmux セッションを作って、5ペインに分割して、Claude Code を5体立ち上げて、全員に「お前は誰で何をすべきか」を教え込む。約20秒で全菌接続完了 🍄
 
 ```
   ┌─────────────────────────────────────────────────┐
@@ -81,141 +93,119 @@ cd kinoko
   ✅ 全菌接続完了。地下ネットワーク稼働中。
 ```
 
-その他のコマンド:
+美しいだろ？ そうでもないか。まあいい。
+
+他のコマンド:
 
 ```bash
-./deploy.sh --clean  # キューをリセットして起動（前回の残骸を掃除）
-./deploy.sh --kill   # セッションを停止
+./deploy.sh --clean  # 前回の残骸を全部掃除して起動
+./deploy.sh --kill   # セッション停止
 ```
 
-## 使い方
+---
 
-起動したら、下部の全幅ペイン（霊芝）に自然言語で指示するだけ。
+## 🎮 使い方：霊芝に話しかけるだけ
+
+起動したら、画面下部の全幅ペイン——霊芝に向かって喋る。日本語で。
 
 ```
 このプロジェクトのREADMEを書いて、テストも追加して
 ```
 
-霊芝が勝手に分解する:
+霊芝が勝手に分解する 🧠
 
-- 「READMEの執筆はベニテングタケに」（創造的なタスク → Opus）
+- 「READMEの執筆はベニテングタケに」（創造的 → Opus）
 - 「テスト追加は冬虫夏草に」（力技 → Opus）
 - 「lint修正はエノキに」（軽量 → Sonnet）
 
-各ワーカーが `queue/tasks/{worker}.md` からタスクを読み取って実行。完了したら `queue/reports/{worker}.md` に結果を書いて霊芝に `send-keys` で報告。霊芝が `dashboard.md` に進捗をまとめる。
+ワーカーは `queue/tasks/{名前}.md` からタスクを読んで実行。完了したら `queue/reports/{名前}.md` に結果を書いて霊芝に報告。霊芝が `dashboard.md` に進捗をまとめる。
 
-**全部リアルタイムで見える。** これが kinoko の核心。Task機能やAPI経由のサブエージェントと違って、全員の思考過程がtmux上で丸見え。間違った方向に走ってたら途中で止められる。
+**全部リアルタイムで見える。** これが核心。
 
-### dashboard.md
+Task機能やAPI経由のサブエージェントと違って、全員の思考過程がtmux上で丸見え。間違った方向に全力疾走してたら途中で止められる。ブラックボックスは嫌いだ。俺は全部見たい。
 
-進捗はダッシュボードに集約される:
+ちなみにこの記事も kinoko で書いてる。冬虫夏草が今まさにこの文章を叩いてる。メタ 🍄
 
-```markdown
-# kinoko ダッシュボード
+---
 
-## 🚨 要対応
-ユーザーの判断が必要な事項
-
-## 🔄 進行中
-- [beni] task_001: README執筆中
-- [cordyceps] task_002: テスト追加中
-
-## ✅ 完了
-- [enoki] task_003: lint修正完了 (14:30)
-
-## ⏸️ 待機中
-なし
-```
-
-霊芝がリアルタイムで更新する。`dashboard.md` を開いておけば全体像が掴める。
-
-## カスタマイズ
+## ⚙️ いじれるところ
 
 ### モデル変更
 
 `deploy.sh` 冒頭の変数を書き換える:
 
 ```bash
-MODEL_BENI="opus"       # ベニテングタケ
-MODEL_CORD="opus"       # 冬虫夏草
-MODEL_MATA="sonnet"     # マタンゴ
-MODEL_ENOK="sonnet"     # エノキ
-MODEL_REISHI="opus"     # 霊芝（指揮官）
+MODEL_BENI="opus"       # ベニテングタケ 🍄
+MODEL_CORD="opus"       # 冬虫夏草 🐛
+MODEL_MATA="sonnet"     # マタンゴ 👻
+MODEL_ENOK="sonnet"     # エノキ 🍢
+MODEL_REISHI="opus"     # 霊芝（指揮官）🧙‍♂️
 ```
 
-全員 Sonnet にすればコストは激減する。全員 Opus にすれば精度は上がるが$200プランでも厳しくなる。用途に合わせて調整してほしい。
+全員 Sonnet にすればレートリミットに余裕が出る。全員 Opus にすれば精度は上がるが$200プランでもキツくなる。
 
-個人的な推奨:
-
-| パターン | 構成 | 向いてるタスク |
+| パターン | 構成 | 向いてるやつ |
 |---------|------|-------------|
-| デフォルト | Opus×3 + Sonnet×2 | バランス型。大半のタスクに対応 |
-| 節約モード | Sonnet×5 | コスト重視。軽めのタスクに |
-| 全力モード | Opus×5 | 精度重視。複雑なリファクタリング等 |
-| ハイブリッド | 霊芝Opus + 全ワーカーSonnet | 指揮だけ賢くしたい場合 |
+| デフォルト | Opus×3 + Sonnet×2 | 大体これでいい |
+| 節約モード | Sonnet×5 | 軽いタスク。財布に優しい |
+| 全力モード | Opus×5 | 複雑なリファクタ。財布に厳しい |
+| ハイブリッド | 霊芝だけOpus + 他Sonnet | 指揮官だけ賢くしたいとき |
 
 ### 権限スキップ
 
 ```bash
-SKIP_PERMISSIONS=false   # デフォルト: 毎回確認
-SKIP_PERMISSIONS=true    # 全ツール呼び出しが確認なしで実行
+SKIP_PERMISSIONS=false   # デフォルト: 毎回確認あり
+SKIP_PERMISSIONS=true    # 全部ノーチェックで実行
 ```
 
-`true` にするとエージェント間の `send-keys` 通信が完全自動化される。ただし **すべてのツール呼び出し** が確認なしで実行される点に注意。ファイル書き込みもコマンド実行も全部ノーチェック。
+`true` にするとエージェント間の通信が完全自動になる。ただし**ファイル書き込みもコマンド実行も全部確認なし**。危ないっちゃ危ない。
 
-俺は `true` で使ってる。リアルタイムで見えてるから危なくなったら止められる。でもデフォルトは `false` にした。初回は確認ありで動かして、慣れたら外すのを推奨。
+俺は `true` で使ってる。リアルタイムで見えてるから、ヤバそうなら止められる。でもデフォルトは `false` にした。最初は確認ありで動かして、慣れたら外すのがいい。
 
-### スピナー動詞
+### スピナー動詞 🎰
 
-kinoko には菌類テーマのスピナー動詞サンプルが付いてる。
+kinoko には菌類テーマのスピナー動詞500個が付いてる。
 
 ```bash
 cp examples/spinner-verbs.json .claude/settings.json
 ```
 
-Claude Code の「Thinking...」が「胞子を拡散中...」「菌糸を展開中...」になる。完全に趣味の領域だが、ターミナルの雰囲気が変わる。
+Claude Code の「Thinking...」が「胞子を拡散中...」「菌糸ネットワーク5G接続中...」「腐敗のCI/CD...」になる。完全に趣味。でもターミナルの雰囲気が激変する。
 
-詳しくは[スピナー記事](https://zenn.dev/hirokitakamura/articles/claude-code-spinner-verbs)を参照。
+詳しくは[スピナー記事](https://zenn.dev/hirokitakamura/articles/claude-code-spinner-verbs)に書いた。
 
-## 通信アーキテクチャ
+---
+
+## 🔌 中身の話：通信はMarkdownだけ
 
 kinoko の通信は驚くほどローテクだ。
 
 ```
-霊芝 → queue/tasks/beni.md にMarkdownで書き込み
-     → tmux send-keys で「タスクを確認してください」
+霊芝 → queue/tasks/beni.md にMarkdownで指示を書く
+     → tmux send-keys で「タスクを確認してください」と叩く
 
-beni → queue/tasks/beni.md を読む
-     → 作業実行
-     → queue/reports/beni.md にMarkdownで結果を書く
-     → tmux send-keys で「報告があります」
+beni → タスクファイルを読む → 作業する
+     → queue/reports/beni.md に結果を書く
+     → tmux send-keys で「報告があります」と霊芝を叩く
 ```
 
-**API通信ゼロ。** エージェント間の通信コストはゼロ。ファイル書き込みとtmuxのキー送信だけ。通信にトークンを使わない。
+**エージェント間の通信コスト、ゼロ。** APIトークンを1つも使わない。ファイルの読み書きと tmux のキー送信だけ。
 
-### なぜ Markdown か
+なぜ Markdown か？ 将軍システムは YAML で通信してたが、kinoko では捨てた。Claude は Markdown を一番自然に読み書きできる。YAML はインデントやクォートでパースエラーが出て地味にダルい。人間も読みやすい。デバッグが楽。三方良し 🎯
 
-将軍システムはYAMLで通信していた。kinoko はMarkdownに変えた。理由:
+### send-keys の罠、3つ踏んだ 🪤
 
-- Claude は Markdown を最も自然に読み書きできる
-- YAML はインデントやクォートのパースエラーが地味に面倒
-- 人間も読みやすい（デバッグが楽）
+tmux の `send-keys`、見た目はシンプルだが罠がある。全部踏んだ。
 
-### send-keys の罠と対策
+**罠1: ペインインデックスが信用できない**
 
-tmux の `send-keys` には罠がある。kinoko ではこれらを踏み抜いて、対策を組み込んだ。
-
-**罠1: ペインインデックスが不安定**
-
-tmux はペインを分割するとインデックスを位置ベース（上→下、左→右）で振り直す。分割順序とインデックスが一致しない。
-
-対策: 各ペインに `@agent_id` カスタム属性を設定し、名前でペインを引く。
+tmux はペインを分割するとインデックスを位置ベースで振り直す。分割した順番と一致しない。ハマった。
 
 ```bash
-# ❌ インデックスで指定（分割後にズレる）
+# ❌ これ、分割後にズレる
 tmux send-keys -t kinoko:0.2 'メッセージ'
 
-# ✅ @agent_id で引く（安定）
+# ✅ @agent_id で名前引き。安定
 PANE=$(tmux list-panes -t kinoko:0 \
   -F '#{pane_id} #{@agent_id}' \
   | grep " matango$" | cut -d' ' -f1)
@@ -224,12 +214,10 @@ tmux send-keys -t "$PANE" 'メッセージ'
 
 **罠2: Enter が権限プロンプトに吸われる**
 
-テキストと Enter を1回で送ると、Claude Code の権限確認プロンプトが途中で出た場合に Enter がそっちに吸われる。
-
-対策: 必ず2回に分けて送信する。
+テキストと Enter を1回で送ると、Claude Code が権限確認を出したタイミングで Enter がそっちに吸われる。意図しない許可が出る。怖い。
 
 ```bash
-# ❌ 1回で送る（Enterが吸われる場合がある）
+# ❌ Enter が吸われることがある
 tmux send-keys -t "$PANE" 'メッセージ' Enter
 
 # ✅ 2回に分ける
@@ -237,33 +225,25 @@ tmux send-keys -t "$PANE" 'メッセージ'
 tmux send-keys -t "$PANE" Enter
 ```
 
-**罠3: 高速送信でバッファ溢れ**
+**罠3: 連続送信でバッファが溢れる**
 
-複数ペインに連続で send-keys すると、tmux のバッファが溢れてメッセージが失われることがある。
-
-対策: 2秒間隔を空ける。
+複数ペインに高速で send-keys すると、メッセージが消える。2秒間隔を空ければ安定する。
 
 ```bash
 tmux send-keys -t "$PANE_BENI" 'タスクを確認してください'
 tmux send-keys -t "$PANE_BENI" Enter
-sleep 2  # これが大事
+sleep 2  # これ大事
 tmux send-keys -t "$PANE_CORD" 'タスクを確認してください'
 tmux send-keys -t "$PANE_CORD" Enter
 ```
 
-### pane-colours[0] — 黒文字問題の解決
+全部 `deploy.sh` に組み込み済み。使う側は何も考えなくていい。
 
-ダークテーマのターミナルで ANSI color 0（黒）を使ったテキストが見えない問題がある。tmux 3.4 以降なら `pane-colours[0]` で色を再定義できる:
+---
 
-```bash
-tmux set-option -p -t "$PANE" 'pane-colours[0]' 'colour240'
-```
+## ⚡ 公式 Agent Teams との違い
 
-ANSI の「黒」がグレー（#585858）に変わって読めるようになる。`deploy.sh` に組み込み済み。地味だけど実用性は高い。
-
-## 公式 Agent Teams との違い
-
-Claude Code には公式のマルチエージェント機能「Agent Teams」が実験的に追加されている:
+Claude Code には公式のマルチエージェント「Agent Teams」が実験的にある:
 
 ```json
 {
@@ -273,75 +253,64 @@ Claude Code には公式のマルチエージェント機能「Agent Teams」が
 }
 ```
 
-kinoko と Agent Teams、どっちを使うべきか。
+環境変数1つで動く。楽。
+
+じゃあ kinoko いらなくね？ って思うだろ。わかる。比較する。
 
 | | kinoko 🍄 | Agent Teams ⚡ |
 |---|---|---|
-| **セットアップ** | `git clone` + `./deploy.sh` | 環境変数1つ |
-| **可視性** | 全ペイン丸見え | リーダーペインのみ |
-| **通信コスト** | ゼロ（ファイル+send-keys） | トークン消費あり |
-| **カスタマイズ** | 全部いじれる（自分のコード） | 設定の範囲内 |
-| **エージェント設計** | 名前・性格・適性を定義可能 | 自動割り当て |
-| **安定性** | 自己責任 | 公式サポート |
-| **学び** | めちゃくちゃ学べる | すぐ使える |
+| セットアップ | `git clone` + `./deploy.sh` | 環境変数1つ |
+| 可視性 | **全ペイン丸見え** | リーダーペインのみ |
+| 通信コスト | **ゼロ** | トークン消費あり |
+| カスタマイズ | 全部いじれる | 設定の範囲内 |
+| エージェント設計 | 名前・性格・適性を定義可能 | 自動割り当て |
+| 安定性 | 自己責任 | 公式サポート |
+| 学び | **めちゃくちゃ学べる** | すぐ使える |
 
-**Agent Teams を選ぶべき人:**
-- すぐに使いたい。設定は最小限がいい
-- 公式サポートの安心感が欲しい
-- マルチエージェントの仕組みには興味がない
+正直、実用性だけなら Agent Teams のほうが楽。
 
-**kinoko を選ぶべき人:**
-- 全エージェントの動きをリアルタイムで見たい
-- エージェントの性格や適性を自分で設計したい
-- tmux + ファイル通信の仕組みを理解したい
-- 「ベニテングタケが報告を書いてる」のを見てニヤニヤしたい
+でも kinoko は**仕組みが全部見える**。マルチエージェントの通信、タスク分解、エラーハンドリング——公式ツールがブラックボックスでやってることを、自分の手で配線できる。壊せる。直せる。理解できる。
 
-正直、実用性だけなら Agent Teams のほうが楽。でも kinoko は**仕組みが全部見える教材**でもある。マルチエージェントを理解したいなら、一度自分で触ってみてほしい。
+「ベニテングタケが報告を書いてる」のを見てニヤニヤしたい人は kinoko を使ってくれ。
 
-## ファイル構成
+---
+
+## 📁 ファイル構成
 
 ```
 kinoko/
-├── CLAUDE.md                # 全エージェント共通の設定・ルール
-├── deploy.sh                # 起動スクリプト
-├── dashboard.md             # 進捗ダッシュボード（霊芝が更新）
+├── CLAUDE.md                # 全エージェントの設計書。これが脳
+├── deploy.sh                # 起動スクリプト。これが心臓
+├── dashboard.md             # 進捗ダッシュボード。霊芝が更新する
 ├── instructions/
 │   ├── reishi.md            # 霊芝の行動ルール
 │   └── worker.md            # ワーカー共通ルール
 ├── queue/
 │   ├── command.md           # ユーザー → 霊芝
-│   ├── tasks/{worker}.md    # 霊芝 → ワーカー（タスク指示）
-│   └── reports/{worker}.md  # ワーカー → 霊芝（完了報告）
+│   ├── tasks/{worker}.md    # 霊芝 → ワーカー
+│   └── reports/{worker}.md  # ワーカー → 霊芝
 └── examples/
-    └── spinner-verbs.json   # スピナー動詞サンプル
+    └── spinner-verbs.json   # スピナー動詞500個
 ```
 
-改造したいなら、まず `CLAUDE.md` を読むのが早い。全エージェントの行動ルール、通信プロトコル、禁止事項が書いてある。kinoko の設計書そのもの。
+改造したいなら `CLAUDE.md` を読め。通信プロトコル、禁止事項、タスクファイル形式——全部書いてある。kinoko の設計書そのもの 📖
 
-## コスト感
+---
 
-5体の Claude Code インスタンスが並列稼働するので、当然コストは嵩む。
+## ⚠️ 既知の制限
 
-目安:
+- **macOS / Linux のみ** — Windows？ 知らん
+- **tmux 3.4+** — `pane-colours` がないと黒文字が見えない
+- **API使用量** — 5体並列。通常の数倍。覚悟しろ
+- **コンテキスト消失** — 長時間稼働するとコンパクション（コンテキスト圧縮）が起きる。回復手順は `CLAUDE.md` に書いてあるから、エージェントは自力で復帰する。が、完璧じゃない
 
-- **$100プラン（Max）**: ギリギリ運用可能。Sonnet多めの構成推奨
-- **$200プラン**: 余裕を持って運用可能。デフォルト構成で快適
-- **APIキー直接**: 従量課金。タスク量に比例。小さいタスクなら安い
+---
 
-$100プランで全員 Opus にすると一瞬でレートリミットに達する。これは前回の記事で書いた通り。デフォルト構成（Opus×3 + Sonnet×2）でも、長時間ぶん回すとリミットに引っかかる。休憩を挟みながら使うか、Sonnet比率を上げるか、$200プランに上げるか。
-
-## 既知の制限
-
-- **macOS / Linux のみ** — Windows は未対応
-- **tmux 3.4 以上が必要** — `pane-colours` 機能のため
-- **API 使用量** — 5インスタンス並列なので通常の数倍
-- **コンテキスト消失** — 長時間稼働するとコンパクション（コンテキスト圧縮）が起きる。`CLAUDE.md` に回復手順を書いてあるので、エージェントは自力で復帰できる。が、完璧ではない
-
-## まとめ
+## 🍄 最後に
 
 kinoko は「マルチエージェントを自分で組んでみたい人」のためのスターターキット。
 
-公式 Agent Teams がある今、自作する実用的な理由は正直少ない。でも全部見えること、全部いじれること、全部理解できること——これは公式ツールでは得られない。
+公式 Agent Teams がある今、自作する実用的な理由は正直少ない。でも全部見えること、全部いじれること、全部理解できること——これは公式ツールじゃ得られない。
 
 ```bash
 git clone https://github.com/infoHiroki/kinoko.git
@@ -349,11 +318,11 @@ cd kinoko
 ./deploy.sh
 ```
 
-3分で菌糸ネットワークが動き出す。
+3分で菌糸ネットワークが動き出す。壊しても俺は知らん 🍄
 
 ---
 
 :::message
-前回の記事: [Claude Code マルチエージェント10体で$100溶けたから菌類5体に転生した話](https://zenn.dev/hirokitakamura/articles/claude-code-multi-agent-shogun-kinoko)
-スピナーの話: [Claude Codeの処理待ちが「般若心経ラップ中」になった日](https://zenn.dev/hirokitakamura/articles/claude-code-spinner-verbs)
+前回の記事 → [Claude Code マルチエージェント10体で$100溶けたから菌類5体に転生した話](https://zenn.dev/hirokitakamura/articles/claude-code-multi-agent-shogun-kinoko)
+スピナーの話 → [Claude Codeの処理待ちが「般若心経ラップ中」になった日](https://zenn.dev/hirokitakamura/articles/claude-code-spinner-verbs)
 :::
