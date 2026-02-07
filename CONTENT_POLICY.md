@@ -64,6 +64,7 @@
 | Vibe Coding | Anthropicの男がコードを読むなと言った日 | vibe-coding-production | ✅ 公開 |
 | マルチエージェント | Claude Code マルチエージェント10体で$100溶けたから菌類5体に転生した話 | claude-code-multi-agent-shogun-kinoko | ✅ 公開 |
 | スピナー | Claude Codeの処理待ちが「般若心経ラップ中」になった日 | claude-code-spinner-verbs | ✅ 公開 |
+| kinoko OSS | Claude Codeマルチエージェント「kinoko」をOSS化した——セットアップからカスタマイズまで | kinoko-oss-multi-agent-guide | 🚧 下書き |
 
 ---
 
