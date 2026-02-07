@@ -10,9 +10,9 @@ published: true
 
 Claude Codeの待ち時間。
 
-「Thinking...」「Reading file...」「Writing code...」
+「Thinking...」「Pondering...」「Clauding...」
 
-毎日何時間も見てる。ツールを呼ぶたびにスピナーが回って、英語の動名詞がぐるぐる流れていく。内容はまあ分かる。分かるけど飽きた。
+毎日何時間も見てる。処理中にスピナーが回って、英語の動名詞がぐるぐる流れていく。内容はまあ分かる。分かるけど飽きた。
 
 ある日、[multi-agent-shogun](https://github.com/yohey-w/multi-agent-shogun)（tmuxベースのマルチエージェントシステム）のコードを読んでて、`settings.json`に面白い設定を見つけた。
 
