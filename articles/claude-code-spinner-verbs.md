@@ -43,9 +43,6 @@ Claude Codeの待ち時間。
 
 以上。設定後すぐに反映される 🎉
 
-![VSCode + Claude Codeでスピナーが動いている作業風景](/images/spinner-work.png)
-*実際の作業画面。カスタムスピナーが処理中に表示されている*
-
 - `mode: "replace"` でデフォルトの英語を完全に置き換え
 - `mode: "append"` だとデフォルトに追加
 - `verbs` に文字列の配列を突っ込む。日本語OK。何個でもOK
