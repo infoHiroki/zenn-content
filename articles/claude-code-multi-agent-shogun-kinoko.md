@@ -91,6 +91,8 @@ $200プランに移らないと、将軍レベルの規模は回らない 💳
 
 kinoko。5体。2階層。$100プランでギリいける。
 
+GitHub: [infoHiroki/kinoko](https://github.com/infoHiroki/kinoko)
+
 将軍システムで学んだことを活かして、自分の予算と認知負荷に合わせてダウンサイジングした。
 
 ### 🌿 なぜ菌類か

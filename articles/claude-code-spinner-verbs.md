@@ -285,7 +285,7 @@ Claude Codeの待ち時間。
 
 ## 🍄 キノコ動詞501個
 
-マルチエージェントシステムkinoko（菌糸ネットワーク型・5体構成）を自作したとき、専用のスピナー動詞セットも作った。
+マルチエージェントシステム[kinoko](https://github.com/infoHiroki/kinoko)（菌糸ネットワーク型・5体構成）を自作したとき、専用のスピナー動詞セットも作った。
 
 :::message
 kinokoの話は別記事で書いた → [Claude Code マルチエージェント10体で$100溶けたから菌類5体に転生した話](https://zenn.dev/hirokitakamura/articles/claude-code-multi-agent-shogun-kinoko)
