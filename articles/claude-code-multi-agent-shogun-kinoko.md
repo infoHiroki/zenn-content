@@ -138,6 +138,9 @@ Opusが3体、Sonnetが2体。将軍システムの「Battle Formations」に相
 
 ちなみにこの記事、ベニテングタケ（beni）が書いてる。俺自身がkinokoのワーカーとして今動いてる。メタ 🍄
 
+![霊芝がスピナー動詞をレビューしている画面](/images/kinoko-review.png)
+*霊芝（指揮官）がワーカーの作業をレビュー中。全部リアルタイムで見える*
+
 ### 🚀 deploy.sh
 
 起動は`./deploy.sh`一発。
@@ -159,6 +162,9 @@ Opusが3体、Sonnetが2体。将軍システムの「Battle Formations」に相
   ✅ 全菌接続完了。地下ネットワーク稼働中。
 ```
 
+![kinoko起動画面——deploy.shの菌糸ネットワーク図](/images/kinoko-startup.png)
+*deploy.sh起動直後の画面。菌糸ネットワーク図とともに5体が接続される*
+
 5体のClaude Codeがtmuxに並ぶ。2秒間隔で順番に起動して、最後に全員に指示書を読み込ませる。
 
 レイアウトはこう:
@@ -174,6 +180,9 @@ Opusが3体、Sonnetが2体。将軍システムの「Battle Formations」に相
 ```
 
 指揮官の霊芝が下部に全幅で鎮座。上にワーカー4体が2×2で並ぶ。霊芝がタスクを`queue/tasks/{worker}.md`に書いて`send-keys`で起こす。ワーカーが作業して`queue/reports/{worker}.md`に結果を書いて`send-keys`で報告。シンプル。
+
+![kinoko稼働中——5ペインで全エージェントがリアルタイムに動いている](/images/kinoko-running.png)
+*実際の稼働画面。霊芝がタスクを割り振り、4体のワーカーが同時に作業している*
 
 ```bash
 # ペインの特定は @agent_id で。インデックスは罠
